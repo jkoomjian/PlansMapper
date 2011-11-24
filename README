@@ -1,0 +1,22 @@
+PlansMapper
+Maps the location of plans users in the US.
+
+To Run:
+* Make sure you have the following gems installed: mysql, json
+* Install the mechanize gem in /lib. Use the gem provided - the newer versions of mechanize are broken.
+* Create the database 'plans_mapper' in mysql.
+* Create this table:
+	CREATE TABLE `addresses` (
+	  `username` varchar(32) NOT NULL,
+	  `lat` varchar(32) NOT NULL,
+	  `lng` varchar(32) NOT NULL,
+	  `addr` varchar(512) NOT NULL,
+	  `city` varchar(512),
+	  `neighborhood` varchar(512),
+	  `state` varchar(64),
+	  `zip` varchar(9),
+	  PRIMARY KEY (`username`),
+	  KEY `neighborhood` (`neighborhood`)
+	);
+* In /src/plans_mapper.rb, set @src_root, @db_user, @db_pass to the correct values
+* Run!  cd src; ruby plans_mapper.rb

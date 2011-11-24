@@ -15,7 +15,6 @@ require 'mysql'
      -s     save a copy of every plan to /plans
      -r     read plans from /plans dir instead of grinnellplans.com
   Generates plans_map.html
-  This project depends on the mechanize gem 1.0.0. Use the gem provided - the newer versions of mechanize are broken.
 EOS
 
 ## Setup
