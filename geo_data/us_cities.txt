@@ -17,8 +17,7 @@ philly
 san fran
 new york city
 mpls
-
-MPLSSt Louis Park
+St Louis Park
 Bay St Louis
 East St Johnsbury
 East St Louis
