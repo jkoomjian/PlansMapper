@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+  html { height: 100% }
+  body { height: 100%; margin: 0; padding: 0; }
+  #info {width: 15%; height: 100%; float: left;}
+  #info > * {padding: 0 7px;}
+  #intro_txt {font-size: smaller;}
+  #search {padding-top: 25px;}
+  #map_canvas { height: 100%; width: 85%; float: right;}
+  #street_view_canvas {position: absolute; top: 0; left 0; display: none;}
+  .basic-modal-content {width:90%; height: 100%;}
+  table {border-collapse: collapse;}
+  table td {border-left: 1px solid #BBBBBB;}
+  table tr td:first-child {border-left-width: 0;}
+  table tr:first-child {border-bottom: 1px solid #BBBBBB;}
+</style>
+<link type='text/css' href='basic.css' rel='stylesheet' media='screen' />
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+<script type='text/javascript' src='jquery.simplemodal.js'></script>
+<script type="text/javascript">
+
+var plans = 
+	[
+		/* PLAN_DATA_PLACEHOLDER */
+	];
+
+var markers = [], infowindows = [], map, gStView;
+
+$(document).ready(function(){
+    var myOptions = {
+      zoom: 4,
+      center: new google.maps.LatLng(37.0625, -95.677068),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+
+	//Add the plans markers and info windows
+	for (var i=0; i<plans.length; i++) {
+		markers.push(new google.maps.Marker({
+						position: new google.maps.LatLng(plans[i]['lat'], plans[i]['lng']),
+						title:"["+plans[i]['username']+"]",
+						map: map
+	    			}));
+		infowindows.push(new google.maps.InfoWindow({
+						content: "<a href='http://grinnellplans.com/read.php?searchname="+plans[i]['username']+"' target='_blank'><b>["+plans[i]['username']+"]</b></a><br>"+
+						plans[i]['addr']+'<br>'+
+						"<a id='street_view_"+i+"' style='width: 200px; height: 200px;' href='javascript:enableStreetView("+plans[i]['lat']+","+plans[i]['lng']+")'>Street View</a>"
+						}));
+	}
+
+	//Add the event handlers
+    for (var i=0; i<markers.length; i++) {
+        google.maps.event.addListener(markers[i], 'click', (function(marker,infowindow){return function(){closeWindows();infowindow.open(map,marker)}})(markers[i],infowindows[i]));       
+    }
+    google.maps.event.addListener(map, 'click', function() {closeWindows();})
+    
+    //update text
+    document.getElementById("plans_total").innerHTML = plans.length;
+    
+    // Load dialog on click
+	$('.basic-modal-button-city').click(function (e) {
+		$('#basic-modal-content-city').modal();
+		return false;
+	});
+	$('.basic-modal-button-neighborhood').click(function (e) {
+		$('#basic-modal-content-neighborhood').modal();
+		return false;
+	});
+});
+
+function closeWindows() {
+	for (var i=0; i<infowindows.length; i++) infowindows[i].close();
+}
+
+function search() {
+	var search_val = document.getElementById("search_input").value;
+	for (var i=0; i<plans.length; i++) {
+		if (search_val.length > 0 && (new RegExp(plans[i]['username'], "i")).exec(search_val)) {
+			map.setCenter(new google.maps.LatLng(plans[i]['lat'], plans[i]['lng']));
+			map.setZoom(14);
+			closeWindows();
+			infowindows[i].open(map,markers[i])
+			return;
+		}
+	}
+	alert("User '"+ search_val + "' could not be found.");
+}
+
+function enableStreetView(lat, lng) {
+	var panoramaOptions = {
+		enableCloseButton: true,
+		visible: true,
+		pov: {
+			heading: 34,
+			pitch: 10,
+    		zoom: 1
+  		}
+	};
+	var mpc = $("#map_canvas"), svc = $("#street_view_canvas");
+
+	try {
+		
+		new google.maps.StreetViewService().getPanoramaByLocation(
+			new google.maps.LatLng(lat, lng),
+			100,  //find locations within 100 meters
+			function(panoramaData, streetViewStatus) {
+				if (streetViewStatus == google.maps.StreetViewStatus.OK) {
+					svc.css({'left': mpc.offset().left, 'width': mpc.css('width'), 'height': mpc.css('height'), 'display': 'block'});
+					gStView = new  google.maps.StreetViewPanorama(svc[0],panoramaOptions);
+					gStView.setPosition(panoramaData.location.latLng);
+				    map.setStreetView(gStView);
+				    google.maps.event.addListener(gStView, 'closeclick', function() {closeStreetView();})
+				} else {
+					alert('Street view not available at this location.')
+				}
+			}
+		);
+		
+	} catch (e) {
+		alert('Street view not available at this location.')
+		closeStreetView();
+	}
+} 
+
+function closeStreetView() {
+	gStView.setVisible(false);
+	$('#street_view_canvas').css('display', 'none');
+}
+
+</script>
+</head>
+<body>
+	<div id="info">
+		<h2 style="margin-left: 10px;">[PlansLand]</h2>
+		<div class="intro_txt">
+			<span id="plans_total"></span> plans users are nice enough to share their contact info. Here's where everyone lives.
+			<div id="search">
+				<input type="text" id="search_input" size="10"/><button onclick="search()">Search</button>
+			</div>
+			<div>
+				
+				<br><br>
+				<a href='#' class='basic-modal-button-city'>The Best Cities in America</a> <span style="font-size:smaller">(i.e. the ones with the most Grinnellians)</span>
+				<pre id="basic-modal-content-city" class="basic-modal-content">
+					<!-- CITIES_LIST_PLACEHOLDER -->
+				</pre>
+				
+				<br><br>
+				<a href='#' class='basic-modal-button-neighborhood'>The Best Neighborhoods in America</a>
+				<pre id="basic-modal-content-neighborhood" class="basic-modal-content">
+					<!-- NEIGHBORHOODS_LIST_PLACEHOLDER -->
+				</pre>
+				
+			</div>
+			<div style="font-size: smaller; padding-top: 50px;">
+				Send comments to [<a href="http://grinnellplans.com/read.php?searchname=koomjian" target="_blank">koomjian</a>]
+			</div>
+		</div>
+	</div>
+	<div id="map_canvas"></div>
+	<div id="street_view_canvas"></div>
+	
+</body>
+</html>

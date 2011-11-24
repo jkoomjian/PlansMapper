@@ -1,0 +1,59 @@
+!!com.aptana.scripting.model.BundleElement
+author: My Name
+children:
+- !!com.aptana.scripting.model.MenuElement
+  children:
+  - children: &id001 []
+    commandName: Swap Case
+    customProperties: null
+    displayName: Swap Case
+    path: bundle.rb
+    scope: null
+  - children: *id001
+    commandName: Sample Snippet
+    customProperties: null
+    displayName: Sample Snippet
+    path: bundle.rb
+    scope: null
+  - children: *id001
+    commandName: '-'
+    customProperties: null
+    displayName: '-'
+    path: bundle.rb
+    scope: null
+  - children:
+    - children: *id001
+      commandName: Sample Snippet
+      customProperties: null
+      displayName: Sample Snippet
+      path: bundle.rb
+      scope: null
+    commandName: Sub Menu
+    customProperties: null
+    displayName: Sub Menu
+    path: bundle.rb
+    scope: null
+  commandName: PlansMapper
+  customProperties: null
+  displayName: PlansMapper
+  path: bundle.rb
+  scope: null
+copyright: '(c) Copyright 2011 sample.org. Distributed under MIT license.
+
+  '
+customProperties: null
+decreaseIndentMarkers: &id002 {}
+description: 'Sample description
+
+  '
+displayName: PlansMapper
+fileTypeRegistry: *id002
+fileTypes: *id001
+foldingStartMarkers: *id002
+foldingStopMarkers: *id002
+increaseIndentMarkers: *id002
+license: null
+licenseUrl: null
+path: bundle.rb
+repository: null
+visible: true
