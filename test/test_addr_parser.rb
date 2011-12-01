@@ -33,7 +33,6 @@ def test_is_state()
 end
 
 def test_is_city()
-  # puts "cities tokens " + @all_cities.length.to_s
   assert is_city("new york city")
   assert is_city("Des Moines")
   assert is_city("Des Moines", true)
@@ -101,9 +100,7 @@ end
 
 def test_parse_addrs() 
   #plan_str = "Contact Info:  jkoomjian@gmail.com    755 17th St.  Des Moines, IA 50314  (515) 243-5829"
-  #plan_str = "316 10th Street N #2 NE Washington DC 20002"
-  #plan_str = get_plan_content(File.open("/home/jonathan/projects/PlansMapper/test_plans/warlicks.html", "r").read)
-  plan_usr = "mauritz"
+  plan_usr = "koomjian"
   plan_str = get_refined_plan_content(File.open("#{@src_root}/plans/#{plan_usr}.html", "r").read)
   results = parse_addrs(plan_str)
   

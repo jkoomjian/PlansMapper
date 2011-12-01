@@ -65,6 +65,9 @@ end
 
 #get the content from the plan
 def get_refined_plan_content(plan_html)
+  #opt-out
+  if plan_html =~ /\(no plans map\)/i: return "" end
+  
  return remove_html( get_plan_txt_from_page(plan_html) ) 
 end
 
