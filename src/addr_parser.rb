@@ -1,11 +1,11 @@
 #return a hash containing all the entires. Value of 2 = partial match (York) and 1 = full match (New York)
-def parse_geo_data(geo_file_path)
+def parse_geo_data(geo_file_path, include_partial_matches=true)
   data = {}
   data_txt = File.open(geo_file_path, "r").read.downcase
   data_txt.split(/\n/).each{|line|
     if line.length > 0
       data[line.downcase] = 1
-      if line =~ /\s+/
+      if line =~ /\s+/ && include_partial_matches
         tokens_so_far = ""
         line.split(/\s+/).reverse.each {|token|
           tokens_so_far = token + (tokens_so_far.length>0 ? (' ' + tokens_so_far) : '').downcase   
@@ -19,8 +19,8 @@ end
 
 @all_states = parse_geo_data(@src_root + "/geo_data/us_states.txt")
 @all_cities = parse_geo_data(@src_root + "/geo_data/us_cities.txt")
-@street_abbvs = parse_geo_data(@src_root + "/geo_data/us_street_abbvs.txt")
-@directions = parse_geo_data(@src_root + "/geo_data/directions.txt")
+@street_abbvs = parse_geo_data(@src_root + "/geo_data/us_street_abbvs.txt", false)
+@directions = parse_geo_data(@src_root + "/geo_data/directions.txt", false)
 @debug = false
 
 def is_zip_cd(token)

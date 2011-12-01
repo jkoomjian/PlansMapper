@@ -33,9 +33,10 @@ def test_is_state()
 end
 
 def test_is_city()
+  # puts "cities tokens " + @all_cities.length.to_s
   assert is_city("new york city")
-  assert is_city("new york", true)
   assert is_city("Des Moines")
+  assert is_city("Des Moines", true)
   assert is_city("Moines")
   assertf is_city("Moines", true)
   assert is_city("grinnell")
@@ -45,8 +46,9 @@ def test_is_city()
   assert is_city("nyc")
   assertf is_city("rinnell")
   assertf is_city("Moine")
-  assert is_city("and")
   assertf is_city("and", true)
+  assert is_city("Shoreline", true)
+  assert is_city("South St Paul", true)
 end
 
 def test_is_apt_type()
@@ -101,7 +103,7 @@ def test_parse_addrs()
   #plan_str = "Contact Info:  jkoomjian@gmail.com    755 17th St.  Des Moines, IA 50314  (515) 243-5829"
   #plan_str = "316 10th Street N #2 NE Washington DC 20002"
   #plan_str = get_plan_content(File.open("/home/jonathan/projects/PlansMapper/test_plans/warlicks.html", "r").read)
-  plan_usr = "wallace1"
+  plan_usr = "mauritz"
   plan_str = get_refined_plan_content(File.open("#{@src_root}/plans/#{plan_usr}.html", "r").read)
   results = parse_addrs(plan_str)
   
@@ -121,7 +123,7 @@ end
 ##---------------------
 #test_is_zip_cd()
 #test_is_state()
-#test_is_city()
+# test_is_city()
 #test_is_apt_type
 #test_is_street_type()
 #test_is_house_nbr()

@@ -8,9 +8,9 @@ To Run:
 * Create this table:
 	CREATE TABLE `addresses` (
 	  `username` varchar(32) NOT NULL,
-	  `lat` varchar(32) NOT NULL,
-	  `lng` varchar(32) NOT NULL,
-	  `addr` varchar(512) NOT NULL,
+	  `lat` varchar(32),
+	  `lng` varchar(32),
+	  `addr` varchar(512),
 	  `city` varchar(512),
 	  `neighborhood` varchar(512),
 	  `state` varchar(64),
